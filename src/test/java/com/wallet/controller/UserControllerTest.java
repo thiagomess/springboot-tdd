@@ -1,5 +1,6 @@
 package com.wallet.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ public class UserControllerTest {
 
 	private static final String URL = "/users";
 
+	private static final Long ID = 1L;
+
 	@MockBean
 	UserService service;
 
@@ -45,14 +48,33 @@ public class UserControllerTest {
 		BDDMockito.given(service.save(Mockito.any(User.class))).willReturn(getMockUser());
 		
 		mvc.perform(MockMvcRequestBuilders.post(URL)
-				.content(getJsonPayload()) //conteudo q a api recebe
+				.content(getJsonPayload(ID, NAME, EMAIL, PASSWORD)) //conteudo q a api recebe
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated());
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("$.data.id").value(ID)) //Acessa os atributos do JSON
+		.andExpect(jsonPath("$.data.name").value(NAME ))
+		.andExpect(jsonPath("$.data.email").value(EMAIL))
+		.andExpect(jsonPath("$.data.password").value(PASSWORD));
 	}
+	
+	@Test
+	public void testSaveInvalidUser() throws JsonProcessingException, Exception {
+		
+		mvc.perform(MockMvcRequestBuilders.post(URL)
+				.content(getJsonPayload(ID, "email", NAME, PASSWORD)) //conteudo q a api recebe
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isBadRequest())
+		.andExpect(jsonPath("$.errors.[0]").value("Email inválido"));
+
+	}
+	
+	
 
 	public User getMockUser() {
 		User u = new User();
+		u.setId(ID);
 		u.setName(NAME);
 		u.setPassword(PASSWORD);
 		u.setEmail(EMAIL);
@@ -60,11 +82,12 @@ public class UserControllerTest {
 	}
 
 	//Monta o payload da requisicao
-	public String getJsonPayload() throws JsonProcessingException {
+	public String getJsonPayload(Long id, String name, String email, String password) throws JsonProcessingException {
 		UserDTO dto = new UserDTO();
-		dto.setName(NAME);
-		dto.setPassword(PASSWORD);
-		dto.setEmail(EMAIL);
+		dto.setId(id);
+		dto.setName(name);
+		dto.setPassword(password);
+		dto.setEmail(email);
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(dto);
