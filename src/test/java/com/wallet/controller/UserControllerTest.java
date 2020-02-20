@@ -55,7 +55,7 @@ public class UserControllerTest {
 		.andExpect(jsonPath("$.data.id").value(ID)) //Acessa os atributos do JSON
 		.andExpect(jsonPath("$.data.name").value(NAME ))
 		.andExpect(jsonPath("$.data.email").value(EMAIL))
-		.andExpect(jsonPath("$.data.password").value(PASSWORD));
+		.andExpect(jsonPath("$.data.password").doesNotExist());
 	}
 	
 	@Test
