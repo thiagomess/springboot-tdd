@@ -1,0 +1,1 @@
+INSERT INTO users(name, password, email) values ('Swagger user', '123456', 'development@swagger.user');
