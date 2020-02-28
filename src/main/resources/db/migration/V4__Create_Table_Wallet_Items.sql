@@ -1,6 +1,6 @@
 CREATE TABLE wallet_items (
-	id bigint(20) NOT NULL AUTO_INCREMENT,
-	wallet bigint(20),
+	id serial NOT NULL,
+	wallet integer,
 	date date,
 	type varchar(2),
 	description varchar(500),
