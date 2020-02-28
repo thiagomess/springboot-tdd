@@ -3,5 +3,6 @@ CREATE TABLE users(
 	name varchar(50) NOT NULL,
 	password varchar(100) NOT NULL,
 	email varchar(100) NOT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	UNIQUE (email)
 );

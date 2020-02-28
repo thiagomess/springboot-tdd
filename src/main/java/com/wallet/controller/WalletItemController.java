@@ -27,10 +27,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wallet.dto.WalletItemDTO;
+import com.wallet.entity.UserWallet;
 import com.wallet.entity.Wallet;
 import com.wallet.entity.WalletItem;
 import com.wallet.response.Response;
+import com.wallet.service.UserWalletService;
 import com.wallet.service.WalletItemService;
+import com.wallet.util.Util;
 import com.wallet.util.enums.TypeEnum;
 
 @RestController
@@ -39,6 +42,8 @@ public class WalletItemController {
 
 	@Autowired
 	private WalletItemService service;
+	
+	@Autowired UserWalletService userWalletService;
 
 	@PostMapping
 	public ResponseEntity<Response<WalletItemDTO>> save(@Valid @RequestBody WalletItemDTO dto, BindingResult result) {
@@ -54,17 +59,23 @@ public class WalletItemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@GetMapping(value = "/{idWalet}")
+	@GetMapping(value = "/{idWallet}")
 	public ResponseEntity<Response<Page<WalletItemDTO>>> findBetweenDates(
 			@RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "linesPerPage", defaultValue = "10") Integer linesPerPage,
 			@RequestParam(value = "startDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
 			@RequestParam(value = "endDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
-			@PathVariable Long idWalet) {
+			@PathVariable Long idWallet) {
 		Response<Page<WalletItemDTO>> response = new Response<>();
+		
+		Optional<UserWallet> uw = userWalletService.findByUsersIdAndWalletId(Util.getAuthenticatedUserId(), idWallet);
 
+		if (uw.isEmpty()) {
+			response.getErrors().add("Você não tem acesso a essa carteira");
+			return ResponseEntity.badRequest().body(response);
+		}
 		PageRequest pg = PageRequest.of(page, linesPerPage);
-		Page<WalletItem> pageWalletItem = service.findBetweenDates(idWalet, startDate, endDate, pg);
+		Page<WalletItem> pageWalletItem = service.findBetweenDates(idWallet, startDate, endDate, pg);
 		Page<WalletItemDTO> pageWalletItemDto = pageWalletItem.map(obj -> this.convertEntityToDto(obj));
 		response.setData(pageWalletItemDto);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -75,6 +86,13 @@ public class WalletItemController {
 	public ResponseEntity<Response<List<WalletItemDTO>>> findByWalletIdAndType(@PathVariable Long idWallet,
 			@RequestParam("type") String type) {
 		Response<List<WalletItemDTO>> response = new Response<>();
+		
+		Optional<UserWallet> uw = userWalletService.findByUsersIdAndWalletId(Util.getAuthenticatedUserId(), idWallet);
+
+		if (uw.isEmpty()) {
+			response.getErrors().add("Você não tem acesso a essa carteira");
+			return ResponseEntity.badRequest().body(response);
+		}
 		List<WalletItemDTO> dto = new ArrayList<>();
 		List<WalletItem> list = service.findByWalletIdAndType(idWallet, TypeEnum.getEnum(type));
 
