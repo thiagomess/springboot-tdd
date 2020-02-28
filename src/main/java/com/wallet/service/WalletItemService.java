@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -23,6 +24,7 @@ public interface WalletItemService {
 
 	void delete(WalletItem walletItem);
 
+	@Cacheable(value = "findByWalletAndType") // configurado no xml
 	List<WalletItem> findByWalletIdAndType(Long idWallet, TypeEnum type);
 
 	BigDecimal sumByWalletId(long idWallet);
