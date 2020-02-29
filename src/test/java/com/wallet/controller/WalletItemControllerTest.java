@@ -223,7 +223,7 @@ public class WalletItemControllerTest {
 	}
 	
 	@Test
-	@WithMockUser // mocka o usuario autenticado
+	@WithMockUser(roles = {"ADMIN"}) // mocka o usuario autenticado
 	public void testDelete() throws Exception {
 		
 		BDDMockito.given(service.findById(Mockito.anyLong())).willReturn(Optional.of(new WalletItem()));
@@ -237,7 +237,7 @@ public class WalletItemControllerTest {
 	}
 	
 	@Test
-	@WithMockUser // mocka o usuario autenticado
+	@WithMockUser(roles = {"ADMIN"}) // mocka o usuario autenticado
 	public void testDeleteInvalid() throws Exception {
 		
 		BDDMockito.given(service.findById(Mockito.anyLong())).willReturn(Optional.empty());

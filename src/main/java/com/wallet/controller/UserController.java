@@ -16,6 +16,7 @@ import com.wallet.entity.User;
 import com.wallet.response.Response;
 import com.wallet.service.UserService;
 import com.wallet.util.Bcrypt;
+import com.wallet.util.enums.RoleEnum;
 
 @RestController
 @RequestMapping("/users")
@@ -46,6 +47,7 @@ public class UserController {
 		user.setEmail(dto.getEmail());
 		user.setName(dto.getName());
 		user.setPassword(Bcrypt.getHash(dto.getPassword()));
+		user.setRole(RoleEnum.valueOf(dto.getRole()));
 		return user;
 	}
 
@@ -55,6 +57,7 @@ public class UserController {
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
 //		dto.setPassword(user.getPassword());
+		dto.setRole(user.getRole().toString());
 		return dto;
 	}
 
