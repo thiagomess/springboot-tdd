@@ -36,3 +36,4 @@ Utilize a interface do Swagger para ter acesso a documentação dos endpoints, e
 
 ### Heroku
 A aplicação está disponível no heroku através da url https://api-wallet-tdd.herokuapp.com/ e documentação https://api-wallet-tdd.herokuapp.com/swagger-ui.html
+
