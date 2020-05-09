@@ -37,3 +37,19 @@ Utilize a interface do Swagger para ter acesso a documentação dos endpoints, e
 ### Heroku
 A aplicação está disponível no heroku através da url https://api-wallet-tdd.herokuapp.com/ e documentação https://api-wallet-tdd.herokuapp.com/swagger-ui.html
 
+O login deve ser feito na url: https://api-wallet-tdd.herokuapp.com/auth, com o payload:
+
+```
+{
+	"email":"admin@teste.com",
+	"password":"123456"
+}
+
+```
+E inserido o token no Authorize:
+Exemplo:
+
+```
+Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0ZS5jb20iLCJyb2xlIjoiUk9MRV9BRE1JTiIsImNyZWF0ZWQiOjE1ODg5ODQ3NTAzMDQsImV4cCI6MTU4ODk4NTM1MH0.05xwVDD0V7GVJTM2ZTrs-7tJWBuMeMjpp9s0HNj45OKBXViY7Q5nJ96QTJ3byBfJPdUyI2ZJoKjC6Bd63FKUcg
+```
+

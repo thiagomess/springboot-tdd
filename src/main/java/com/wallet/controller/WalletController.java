@@ -16,6 +16,9 @@ import com.wallet.entity.Wallet;
 import com.wallet.response.Response;
 import com.wallet.service.WalletService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 @RestController
 @RequestMapping("/wallet")
 public class WalletController {
@@ -23,6 +26,8 @@ public class WalletController {
 	@Autowired
 	private WalletService service;
 
+	@ApiOperation(value = "Cadastra uma wallet", response = WalletDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@PostMapping
 	public ResponseEntity<Response<WalletDTO>> save(@Valid @RequestBody WalletDTO dto, BindingResult result) {
 

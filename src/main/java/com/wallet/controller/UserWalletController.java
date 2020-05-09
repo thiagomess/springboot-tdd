@@ -18,6 +18,9 @@ import com.wallet.entity.Wallet;
 import com.wallet.response.Response;
 import com.wallet.service.UserWalletService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 @RestController
 @RequestMapping("/user-wallet")
 public class UserWalletController {
@@ -25,6 +28,8 @@ public class UserWalletController {
 	@Autowired
 	private UserWalletService service;
 
+	@ApiOperation(value = "Vincula um user a uma wallet", response = UserWalletDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@PostMapping
 	public ResponseEntity<Response<UserWalletDTO>> save(@Valid @RequestBody UserWalletDTO dto, BindingResult result) {
 

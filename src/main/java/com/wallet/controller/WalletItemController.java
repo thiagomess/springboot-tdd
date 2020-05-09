@@ -39,6 +39,9 @@ import com.wallet.service.WalletItemService;
 import com.wallet.util.Util;
 import com.wallet.util.enums.TypeEnum;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 @RestController
 @RequestMapping("/wallet-item")
 public class WalletItemController {
@@ -50,6 +53,8 @@ public class WalletItemController {
 	
 	private static final Logger log = LoggerFactory.getLogger(WalletController.class);
 
+	@ApiOperation(value = "Cadastra um item em uma wallet", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@PostMapping
 	public ResponseEntity<Response<WalletItemDTO>> save(@Valid @RequestBody WalletItemDTO dto, BindingResult result) {
 		Response<WalletItemDTO> response = new Response<>();
@@ -64,6 +69,8 @@ public class WalletItemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
+	@ApiOperation(value = "Retorna por id", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@GetMapping(value = "/{idWallet}")
 	public ResponseEntity<Response<Page<WalletItemDTO>>> findBetweenDates(
 			@RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -87,6 +94,8 @@ public class WalletItemController {
 
 	}
 
+	@ApiOperation(value = "Retorna por type", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@GetMapping(value = "/type/{idWallet}")
 	public ResponseEntity<Response<List<WalletItemDTO>>> findByWalletIdAndType(@PathVariable Long idWallet,
 			@RequestParam("type") String type) {
@@ -109,6 +118,8 @@ public class WalletItemController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	@ApiOperation(value = "Retorna por total", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@GetMapping(value = "/total/{idWallet}")
 	public ResponseEntity<Response<BigDecimal>> sumByWalletId(@PathVariable Long idWallet) {
 		Response<BigDecimal> response = new Response<>();
@@ -119,6 +130,8 @@ public class WalletItemController {
 		return ResponseEntity.ok().body(response);
 	}
 
+	@ApiOperation(value = "Altera um item", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@PutMapping
 	public ResponseEntity<Response<WalletItemDTO>> update(@Valid @RequestBody WalletItemDTO dto, BindingResult result) {
 		Response<WalletItemDTO> response = new Response<>();
@@ -142,6 +155,8 @@ public class WalletItemController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
+	@ApiOperation(value = "Deleta por id", response = WalletItemDTO.class
+			, authorizations = {@Authorization(value = "Authorization")})
 	@DeleteMapping("/{walletItemId}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Response<String>> delete(@PathVariable Long walletItemId) {
